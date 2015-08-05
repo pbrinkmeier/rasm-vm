@@ -11,14 +11,14 @@ function equal (a, b) {
 }
 
 describe('rasm-vm', function () {
-  describe('0x0x HLT', function () {
+  describe('0x0000 HLT', function () {
     it('sets the VM status to halted', function () {
       var test = new Vm()
 
       // halt
 
-      test.Ram[0] = 0x00
-      test.Ram[1] = 0x00
+      test.writeRam(0, 0x00)
+      test.writeRam(1, 0x00)
 
       test.step()
 
@@ -36,10 +36,10 @@ describe('rasm-vm', function () {
 
       // cmp r0 #2a
 
-      test.Ram[0] = 0x21
-      test.Ram[1] = 0x2a
+      test.writeRam(0, 0x21)
+      test.writeRam(1, 0x2a)
 
-      test.registers[0] = 0x2a
+      test.writeRegister(0, 0x2a)
       test.step()
 
       equal(test.bits.z, 1)
@@ -50,10 +50,10 @@ describe('rasm-vm', function () {
 
       // cmp r0 #2a
 
-      test.Ram[0] = 0x21
-      test.Ram[1] = 0x2a
+      test.writeRam(0, 0x21)
+      test.writeRam(1, 0x2a)
 
-      test.registers[0] = 0x29
+      test.writeRegister(0, 0x29)
       test.step()
 
       equal(test.bits.z, 0)
@@ -64,25 +64,25 @@ describe('rasm-vm', function () {
 
       // cmp r0 r1
 
-      test.Ram[0] = 0x20
-      test.Ram[1] = 0x01
+      test.writeRam(0, 0x20)
+      test.writeRam(1, 0x01)
 
-      test.registers[0] = 0x2a
-      test.registers[1] = 0x2a
+      test.writeRegister(0, 0x2a)
+      test.writeRegister(1, 0x2a)
       test.step()
 
       equal(test.bits.z, 1)
     })
   })
 
-  describe('0x3x JMP', function () {
+  describe('0x31 JMP', function () {
     it('sets the instruction pointer to some value', function () {
       var test = new Vm()
 
       // jmp #2a
 
-      test.Ram[0] = 0x31
-      test.Ram[1] = 0x2a
+      test.writeRam(0, 0x31)
+      test.writeRam(1, 0x2a)
 
       test.step()
 
@@ -90,12 +90,42 @@ describe('rasm-vm', function () {
     })
   })
 
-  describe('0x4x CALL', function () {
-    // TODO
+  describe('0x41 CALL', function () {
+    it('pushes the instruction pointer to the stack then sets it to some value', function () {
+      var test = new Vm()
+
+      // call #2a
+
+      test.writeRam(0, 0x41)
+      test.writeRam(1, 0x2a)
+
+      var oldIp = test.ip + 2
+      var oldSp = test.sp
+      test.step()
+
+      equal(test.ip, 0x2a)
+      equal(test.sp, oldSp - 1)
+      equal(test.Ram[oldSp], oldIp)
+    })
   })
 
-  describe('0x5x RET', function () {
-    // TODO
+  describe('0x5000 RET', function () {
+    it('pops the stack into the instruction pointer', function () {
+      var test = new Vm()
+
+      // ret
+
+      test.writeRam(0, 0x50)
+      test.writeRam(1, 0x00)
+
+      test.writeRam(test.sp, 0x2a)
+      test.writeSp(test.sp - 1)
+      var oldSp = test.sp
+      test.step()
+
+      equal(test.ip, 0x2a)
+      equal(test.sp, oldSp + 1)
+    })
   })
 
   describe('0x60 JZ', function () {

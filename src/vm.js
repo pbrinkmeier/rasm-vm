@@ -181,11 +181,16 @@ Vm.prototype.step = function () {
 
         break
       case CALL:
-        // TODO
+        getValue()
+
+        this.writeRam(this.sp, this.ip)
+        this.writeSp(this.sp - 1)
+        this.writeIp(value)
 
         break
       case RETURN:
-        // TODO
+        this.writeSp(this.sp + 1)
+        this.writeIp(this.Ram[this.sp])
 
         break
       case CONDJUMP:
@@ -291,7 +296,7 @@ Vm.prototype.step = function () {
     }
   }
 
-  this.trigger('step', [])
+  this.events.trigger('step')
 }
 
 module.exports = Vm
