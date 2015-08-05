@@ -1,0 +1,25 @@
+{
+  "name": "rasm-vm",
+  "version": "0.0.1",
+  "description": "an easily observable VM",
+  "main": "src/vm.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "keywords": [
+    "vm",
+    "asm",
+    "rasm"
+  ],
+  "author": "reg4in",
+  "license": "MIT",
+  "dependencies": {
+    "reeal": "^0.1.2"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5"
+  }
+}

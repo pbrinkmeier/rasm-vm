@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RASM Instruction Specification</title>
+</head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Name</th>
+        <th>Bits</th>
+        <th>Examples</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0</td>
+        <td>Halt</td>
+        <td>
+          <pre><code>0000 0000 0000 0000</code></pre>
+        </td>
+        <td>
+          <pre><code>#0000 | halt</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>Interrupt</td>
+        <td>
+          <pre><code>#0001 0000 xxxx xxxx
+
+  x: Interrupt ID</code></pre>
+        </td>
+        <td>
+          <pre><code>#102a | int #2a</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Compare</td>
+        <td>
+          <pre><code>0010 xxyy zzzz zzzz
+
+  x: Register (0-3)
+  y: Addressing mode (0-1)
+  z: Register / constant</code></pre>
+        </td>
+        <td>
+          <pre><code>#2001 | cmp r0 r1
+#2d2a | cmp r3 #2a</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Unconditional Jump</td>
+        <td>
+          <pre><code>0011 0001 xxxx xxxx
+
+  x: Constant</code></pre>
+        </td>
+        <td>
+          <pre><code>#312a | jmp #2a</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Subroutine call</td>
+        <td>
+          <pre><code>0100 0001 xxxx xxxx
+
+  x: Constant</code></pre>
+        </td>
+        <td>
+          <pre><code>#412a | call #2a</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Return from subroutine</td>
+        <td>
+          <pre><code>0101 0000 0000 0000</code></pre>
+        </td>
+        <td>
+          <pre><code>#5000 | ret</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Conditional jump</td>
+        <td>
+          <pre><code>0110 00xx yyyy yyyy
+
+  x: Subtype
+    0: Jump if zero flag set
+    1: Jump if zero flag not set
+    2: Jump if carry flag set
+    3: Jump if carry flag not set
+  y: Constant</code></pre>
+        </td>
+        <td>
+          <pre><code>#602a | jz #2a
+#612a | jnz #2a
+#622a | jc #2a
+#632a | jnc #2a</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Load to register</td>
+        <td>
+          <pre><code>0111 xxyy zzzz zzzz
+
+  x: Register (0-3)
+  y: Addressing mode (0-3)
+  z: Register / constant / address / register w/ address</code></pre>
+        </td>
+        <td>
+          <pre><code>#7001 | ld r0 r1
+#712a | ld r0 #2a
+#722a | ld r0 @2a
+#7301 | ld r0 @r1</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Store to memory</td>
+        <td>
+          <pre><code>1000 xxyy zzzz zzzz
+
+  x: Register (0-3)
+  y: Addressing mode (2-3)
+  z: Address / Register w/ address</code></pre>
+        </td>
+        <td>
+          <pre><code>#822a | st r0 @2a
+#8301 | st r0 @r1</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>Addition</td>
+        <td>
+          <pre><code>1001 xxyy zzzz zzzz
+
+  x: Register (0-3)
+  y: Addressing mode (0-1)
+  z: Register / constant</code></pre>
+        </td>
+        <td>
+          <pre><code>#9001 | add r0 r1
+#912a | add r0 #2a</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>Subtraction</td>
+        <td>
+          <pre><code>1010 xxyy zzzz zzzz
+
+  x: Register (0-3)
+  y: Addressing mode (0-1)
+  z: Register / constant</code></pre>
+        </td>
+        <td>
+          <pre><code>#a001 | sub r0 r1
+#a12a | sub r0 #2a</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td>Bitwise AND</td>
+        <td>
+          <pre><code>1011 xxyy zzzz zzzz
+
+  x: Register (0-3)
+  y: Addressing mode (0-1)
+  z: Register / constant</code></pre>
+        </td>
+        <td>
+          <pre><code>#b001 | and r0 r1
+#b12a | and r0 #2a</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td>Bitwise OR</td>
+        <td>
+          <pre><code>1100 xxyy zzzz zzzz
+
+  x: Register (0-3)
+  y: Addressing mode (0-1)
+  z: Register / constant</code></pre>
+        </td>
+        <td>
+          <pre><code>#c001 | or r0 r1
+#c12a | or r0 #2a</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td>Bitwise XOR</td>
+        <td>
+          <pre><code>1011 xxyy zzzz zzzz
+
+  x: Register (0-3)
+  y: Addressing mode (0-1)
+  z: Register / constant</code></pre>
+        </td>
+        <td>
+          <pre><code>#d001 | xor r0 r1
+#d12a | xor r0 #2a</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>14</td>
+        <td>Unary operations</td>
+        <td>
+          <pre><code>1110 0xxx 0000 00yy
+
+  x: Subtype
+    0: Incremention
+    1: Decremention
+    2: Bitwise NOT
+    3: Bitshift left
+    4: Bitshift right
+  y: Register</code></pre>
+        </td>
+        <td>
+          <pre><code>#e000 | inc r0
+#e101 | dec r1
+#e200 | not r0
+#e300 | asl r0
+#e403 | asl r3</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td>Stack operations</td>
+        <td>
+          <pre><code>1111 xx0y 0000 000
+
+  x: Register (0-3)
+  y: Subtype
+    0: Push
+    1: Pop</code></pre>
+        </td>
+        <td>
+          <pre><code>#f000 | push r0
+#fd00 | pop r3</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
