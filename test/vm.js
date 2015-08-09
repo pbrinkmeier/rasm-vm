@@ -1,7 +1,5 @@
 'use strict'
 
-// TODO: rewrite all with .writeRam, .writeRegister, etc.
-
 var Vm = require('../src/vm.js')
 
 function equal (a, b) {
@@ -27,7 +25,7 @@ describe('rasm-vm', function () {
   })
 
   describe('0x1x INT', function () {
-    // TODO
+    // TODO: Write spec/implement interrupts
   })
 
   describe('0x2x CMP', function () {
@@ -135,17 +133,17 @@ describe('rasm-vm', function () {
       // jz #2a
       // jz #2b
 
-      test.Ram[0] = 0x60
-      test.Ram[1] = 0x2a
-      test.Ram[2] = 0x60
-      test.Ram[3] = 0x2b
+      test.writeRam(0, 0x60)
+      test.writeRam(1, 0x2a)
+      test.writeRam(2, 0x60)
+      test.writeRam(3, 0x2b)
 
-      test.bits.z = 0
+      test.writeZBit(0)
       test.step()
 
       equal(test.ip, 2)
 
-      test.bits.z = 1
+      test.writeZBit(1)
       test.step()
 
       equal(test.ip, 0x2b)
@@ -159,17 +157,17 @@ describe('rasm-vm', function () {
       // jnz #2a
       // jnz #2b
 
-      test.Ram[0] = 0x61
-      test.Ram[1] = 0x2a
-      test.Ram[2] = 0x61
-      test.Ram[3] = 0x2b
+      test.writeRam(0, 0x61)
+      test.writeRam(1, 0x2a)
+      test.writeRam(2, 0x61)
+      test.writeRam(3, 0x2b)
 
-      test.bits.z = 1
+      test.writeZBit(1)
       test.step()
 
       equal(test.ip, 2)
 
-      test.bits.z = 0
+      test.writeZBit(0)
       test.step()
 
       equal(test.ip, 0x2b)
@@ -183,17 +181,17 @@ describe('rasm-vm', function () {
       // jc #2a
       // jc #2b
 
-      test.Ram[0] = 0x62
-      test.Ram[1] = 0x2a
-      test.Ram[2] = 0x62
-      test.Ram[3] = 0x2b
+      test.writeRam(0, 0x62)
+      test.writeRam(1, 0x2a)
+      test.writeRam(2, 0x62)
+      test.writeRam(3, 0x2b)
 
-      test.bits.c = 0
+      test.writeCBit(0)
       test.step()
 
       equal(test.ip, 2)
 
-      test.bits.c = 1
+      test.writeCBit(1)
       test.step()
 
       equal(test.ip, 0x2b)
@@ -207,17 +205,17 @@ describe('rasm-vm', function () {
       // jnc #2a
       // jnc #2b
 
-      test.Ram[0] = 0x63
-      test.Ram[1] = 0x2a
-      test.Ram[2] = 0x63
-      test.Ram[3] = 0x2b
+      test.writeRam(0, 0x63)
+      test.writeRam(1, 0x2a)
+      test.writeRam(2, 0x63)
+      test.writeRam(3, 0x2b)
 
-      test.bits.c = 1
+      test.writeCBit(1)
       test.step()
 
       equal(test.ip, 2)
 
-      test.bits.c = 0
+      test.writeCBit(0)
       test.step()
 
       equal(test.ip, 0x2b)
@@ -230,10 +228,10 @@ describe('rasm-vm', function () {
 
       // ld r0 r1
 
-      test.Ram[0] = 0x70
-      test.Ram[1] = 0x01
+      test.writeRam(0, 0x70)
+      test.writeRam(1, 0x01)
 
-      test.registers[1] = 0x2a
+      test.writeRegister(1, 0x2a)
       test.step()
 
       equal(test.registers[0], 0x2a)
@@ -244,8 +242,8 @@ describe('rasm-vm', function () {
 
       // ld r3 #2a
 
-      test.Ram[0] = 0x7d
-      test.Ram[1] = 0x2a
+      test.writeRam(0, 0x7d)
+      test.writeRam(1, 0x2a)
 
       test.step()
 
@@ -257,10 +255,10 @@ describe('rasm-vm', function () {
 
       // ld r0 @a2
 
-      test.Ram[0] = 0x72
-      test.Ram[1] = 0xa2
+      test.writeRam(0, 0x72)
+      test.writeRam(1, 0xa2)
 
-      test.Ram[0xa2] = 0x2a
+      test.writeRam(0xa2, 0x2a)
       test.step()
 
       equal(test.registers[0], 0x2a)
@@ -271,11 +269,11 @@ describe('rasm-vm', function () {
 
       // ld r0 @r1
 
-      test.Ram[0] = 0x73
-      test.Ram[1] = 0x01
+      test.writeRam(0, 0x73)
+      test.writeRam(1, 0x01)
 
-      test.Ram[0xa2] = 0x2a
-      test.registers[1] = 0xa2
+      test.writeRam(0xa2, 0x2a)
+      test.writeRegister(1, 0xa2)
       test.step()
 
       equal(test.registers[0], 0x2a)
@@ -288,10 +286,10 @@ describe('rasm-vm', function () {
 
       // st r0 @a2
 
-      test.Ram[0] = 0x82
-      test.Ram[1] = 0xa2
+      test.writeRam(0, 0x82)
+      test.writeRam(1, 0xa2)
 
-      test.registers[0] = 0x2a
+      test.writeRegister(0, 0x2a)
       test.step()
 
       equal(test.Ram[0xa2], 0x2a)
@@ -302,11 +300,11 @@ describe('rasm-vm', function () {
 
       // st r0 @r1
 
-      test.Ram[0] = 0x83
-      test.Ram[1] = 0x01
+      test.writeRam(0, 0x83)
+      test.writeRam(1, 0x01)
 
-      test.registers[0] = 0x2a
-      test.registers[1] = 0xa2
+      test.writeRegister(0, 0x2a)
+      test.writeRegister(1, 0xa2)
       test.step()
 
       equal(test.Ram[0xa2], 0x2a)
@@ -319,11 +317,11 @@ describe('rasm-vm', function () {
 
       // add r0 r1
 
-      test.Ram[0] = 0x90
-      test.Ram[1] = 0x01
+      test.writeRam(0, 0x90)
+      test.writeRam(1, 0x01)
 
-      test.registers[0] = 0x20
-      test.registers[1] = 0x0a
+      test.writeRegister(0, 0x20)
+      test.writeRegister(1, 0x0a)
       test.step()
 
       equal(test.registers[0], 0x2a)
@@ -334,10 +332,10 @@ describe('rasm-vm', function () {
 
       // add r0 #0a
 
-      test.Ram[0] = 0x91
-      test.Ram[1] = 0x0a
+      test.writeRam(0, 0x91)
+      test.writeRam(1, 0x0a)
 
-      test.registers[0] = 0x20
+      test.writeRegister(0, 0x20)
       test.step()
 
       equal(test.registers[0], 0x2a)
@@ -349,12 +347,12 @@ describe('rasm-vm', function () {
       // add r0 #ff
       // add r0 #2a
 
-      test.Ram[0] = 0x91
-      test.Ram[1] = 0xff
-      test.Ram[2] = 0x91
-      test.Ram[3] = 0x2a
+      test.writeRam(0, 0x91)
+      test.writeRam(1, 0xff)
+      test.writeRam(2, 0x91)
+      test.writeRam(3, 0x2a)
 
-      test.registers[0] = 0x01
+      test.writeRegister(0, 0x01)
       test.step()
 
       equal(test.bits.c, 1)
@@ -373,11 +371,11 @@ describe('rasm-vm', function () {
 
       // sub r0 r1
 
-      test.Ram[0] = 0xa0
-      test.Ram[1] = 0x01
+      test.writeRam(0, 0xa0)
+      test.writeRam(1, 0x01)
 
-      test.registers[0] = 0x33
-      test.registers[1] = 0x09
+      test.writeRegister(0, 0x33)
+      test.writeRegister(1, 0x09)
       test.step()
 
       equal(test.registers[0], 0x2a)
@@ -388,10 +386,10 @@ describe('rasm-vm', function () {
 
       // sub r0 #09
 
-      test.Ram[0] = 0xa1
-      test.Ram[1] = 0x09
+      test.writeRam(0, 0xa1)
+      test.writeRam(1, 0x09)
 
-      test.registers[0] = 0x33
+      test.writeRegister(0, 0x33)
       test.step()
 
       equal(test.registers[0], 0x2a)
@@ -403,12 +401,12 @@ describe('rasm-vm', function () {
       // sub r0 #02
       // sub r0 #d5
 
-      test.Ram[0] = 0xa1
-      test.Ram[1] = 0x02
-      test.Ram[2] = 0xa1
-      test.Ram[3] = 0xd5
+      test.writeRam(0, 0xa1)
+      test.writeRam(1, 0x02)
+      test.writeRam(2, 0xa1)
+      test.writeRam(3, 0xd5)
 
-      test.registers[0] = 0x01
+      test.writeRegister(0, 0x01)
       test.step()
 
       equal(test.bits.c, 1)
@@ -427,11 +425,11 @@ describe('rasm-vm', function () {
 
       // and r0 r1
 
-      test.Ram[0] = 0xb0
-      test.Ram[1] = 0x01
+      test.writeRam(0, 0xb0)
+      test.writeRam(1, 0x01)
 
-      test.registers[0] = 0xfa
-      test.registers[1] = 0x2f
+      test.writeRegister(0, 0xfa)
+      test.writeRegister(1, 0x2f)
       test.step()
 
       equal(test.registers[0], 0x2a)
@@ -458,11 +456,11 @@ describe('rasm-vm', function () {
 
       // or r0 r1
 
-      test.Ram[0] = 0xc0
-      test.Ram[1] = 0x01
+      test.writeRam(0, 0xc0)
+      test.writeRam(1, 0x01)
 
-      test.registers[0] = 0x0a
-      test.registers[1] = 0x20
+      test.writeRegister(0, 0x0a)
+      test.writeRegister(1, 0x20)
       test.step()
 
       equal(test.registers[0], 0x2a)
@@ -489,11 +487,11 @@ describe('rasm-vm', function () {
 
       // xor r0 r1
 
-      test.Ram[0] = 0xd0
-      test.Ram[1] = 0x01
+      test.writeRam(0, 0xd0)
+      test.writeRam(1, 0x01)
 
-      test.registers[0] = 0x4c
-      test.registers[1] = 0x66
+      test.writeRegister(0, 0x4c)
+      test.writeRegister(1, 0x66)
       test.step()
 
       equal(test.registers[0], 0x2a)
@@ -654,6 +652,42 @@ describe('rasm-vm', function () {
       test.writeRegister(0, 0x54)
       test.step()
 
+      equal(test.registers[0], 0x2a)
+    })
+  })
+
+  describe('0xf0 PUSH', function () {
+    it('puts a register into the RAM at the addres of the current stack pointer and decrements it', function () {
+      var test = new Vm()
+
+      // push r0
+
+      test.writeRam(0, 0xf0)
+      test.writeRam(1, 0x00)
+
+      test.writeRegister(0, 0x2a)
+      var oldSp = test.sp
+      test.step()
+
+      equal(test.sp, oldSp - 1)
+      equal(test.Ram[oldSp], 0x2a)
+    })
+  })
+
+  describe('0xf1 POP', function () {
+    it('increments the stack pointer and puts the value at its address into a register', function () {
+      var test = new Vm()
+
+      // pop r0
+
+      test.writeRam(0, 0xf1)
+      test.writeRam(1, 0x00)
+
+      test.writeRam(test.sp + 1, 0x2a)
+      var oldSp = test.sp
+      test.step()
+
+      equal(test.sp, oldSp + 1)
       equal(test.registers[0], 0x2a)
     })
   })

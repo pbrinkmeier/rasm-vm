@@ -290,7 +290,18 @@ Vm.prototype.step = function () {
 
         break
       case STACK:
-        // TODO
+        switch (instruction & 1) {
+          case PUSH:
+            this.writeRam(this.sp, this.registers[register])
+            this.writeSp(this.sp - 1)
+
+            break
+          case POP:
+            this.writeSp(this.sp + 1)
+            this.writeRegister(register, this.Ram[this.sp])
+
+            break
+        }
 
         break
     }
