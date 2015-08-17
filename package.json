@@ -9,6 +9,10 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reg4in/rasm-vm.git"
+  },
   "keywords": [
     "vm",
     "asm",
@@ -16,6 +20,10 @@
   ],
   "author": "reg4in",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/reg4in/rasm-asm/issues"
+  },
+  "homepage": "https://github.com/reg4in/rasm-asm#readme",
   "dependencies": {
     "reeal": "^0.1.2"
   },

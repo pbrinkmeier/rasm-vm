@@ -50,7 +50,7 @@ Vm.prototype.reset = function () {
   this.Ram = new Array(256)
   this.registers = new Array(4)
   this.ip = 0
-  this.sp = 0xbf
+  this.sp = 0xdf
   this.bits = {
     z: 0,
     c: 0

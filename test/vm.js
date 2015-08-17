@@ -691,4 +691,12 @@ describe('rasm-vm', function () {
       equal(test.registers[0], 0x2a)
     })
   })
+
+  describe('test programs', function () {
+    it('fibonacci', function () {
+      var test = new Vm()
+
+      //
+    })
+  })
 })
