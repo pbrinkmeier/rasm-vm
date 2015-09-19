@@ -1,6 +1,6 @@
 {
   "name": "rasm-vm",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "an easily observable VM",
   "main": "src/vm.js",
   "directories": {
