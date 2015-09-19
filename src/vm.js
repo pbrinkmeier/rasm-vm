@@ -2,7 +2,6 @@
 
 // TODO: only allow certain addressing modes on some of the instructions
 
-var fill = require('./util/fill.js')
 var limit = require('./util/limit.js')
 var Reeal = require('reeal')
 
@@ -41,23 +40,31 @@ var AM_INDEX = 0x3
 function Vm () {
   this.events = new Reeal()
 
-  this.reset()
-}
-
-Vm.prototype.reset = function () {
-  this.halted = false
-
   this.Ram = new Array(256)
   this.registers = new Array(4)
-  this.ip = 0
-  this.sp = 0xdf
   this.bits = {
     z: 0,
     c: 0
   }
 
-  fill(this.Ram, 0)
-  fill(this.registers, 0)
+  /* this.reset() */
+}
+
+Vm.prototype.reset = function () {
+  this.halted = false
+
+  this.writeIp(0)
+  this.writeSp(0xdf)
+  this.writeZBit(0)
+  this.writeCBit(0)
+
+  for (var i = 0, length = this.Ram.length; i < length; i++) {
+    this.writeRam(i, 0)
+  }
+
+  for (var i = 0, length = this.registers.length; i < length; i++) {
+    this.writeRegister(i, 0)
+  }
 }
 
 Vm.prototype.writeRam = function (address, value) {

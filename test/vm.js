@@ -12,6 +12,7 @@ describe('rasm-vm', function () {
   describe('0x0000 HLT', function () {
     it('sets the VM status to halted', function () {
       var test = new Vm()
+      test.reset()
 
       // halt
 
@@ -31,6 +32,7 @@ describe('rasm-vm', function () {
   describe('0x2x CMP', function () {
     it('compares two values and set the Z bit to 1 if they are equal', function () {
       var test = new Vm()
+      test.reset()
 
       // cmp r0 #2a
 
@@ -45,6 +47,7 @@ describe('rasm-vm', function () {
 
     it('compares two values and set the Z bit to 0 if they are not equal', function () {
       var test = new Vm()
+      test.reset()
 
       // cmp r0 #2a
 
@@ -59,6 +62,7 @@ describe('rasm-vm', function () {
 
     it('can also compare two registers', function () {
       var test = new Vm()
+      test.reset()
 
       // cmp r0 r1
 
@@ -76,6 +80,7 @@ describe('rasm-vm', function () {
   describe('0x31 JMP', function () {
     it('sets the instruction pointer to some value', function () {
       var test = new Vm()
+      test.reset()
 
       // jmp #2a
 
@@ -91,6 +96,7 @@ describe('rasm-vm', function () {
   describe('0x41 CALL', function () {
     it('pushes the instruction pointer to the stack then sets it to some value', function () {
       var test = new Vm()
+      test.reset()
 
       // call #2a
 
@@ -110,6 +116,7 @@ describe('rasm-vm', function () {
   describe('0x5000 RET', function () {
     it('pops the stack into the instruction pointer', function () {
       var test = new Vm()
+      test.reset()
 
       // ret
 
@@ -129,6 +136,7 @@ describe('rasm-vm', function () {
   describe('0x60 JZ', function () {
     it('sets the instruction pointer if the zero bit is 1', function () {
       var test = new Vm()
+      test.reset()
 
       // jz #2a
       // jz #2b
@@ -153,6 +161,7 @@ describe('rasm-vm', function () {
   describe('0x61 JNZ', function () {
     it('sets the instruction pointer if the zero bit is 0', function () {
       var test = new Vm()
+      test.reset()
 
       // jnz #2a
       // jnz #2b
@@ -177,6 +186,7 @@ describe('rasm-vm', function () {
   describe('0x62 JC', function () {
     it('sets the instruction pointer if the carry bit is 0', function () {
       var test = new Vm()
+      test.reset()
 
       // jc #2a
       // jc #2b
@@ -201,6 +211,7 @@ describe('rasm-vm', function () {
   describe('0x63 JNC', function () {
     it('sets the instruction pointer if the carry bit is 0', function () {
       var test = new Vm()
+      test.reset()
 
       // jnc #2a
       // jnc #2b
@@ -225,6 +236,7 @@ describe('rasm-vm', function () {
   describe('0x7x LD', function () {
     it('loads a value from another register', function () {
       var test = new Vm()
+      test.reset()
 
       // ld r0 r1
 
@@ -239,6 +251,7 @@ describe('rasm-vm', function () {
 
     it('loads a constant value', function () {
       var test = new Vm()
+      test.reset()
 
       // ld r3 #2a
 
@@ -252,6 +265,7 @@ describe('rasm-vm', function () {
 
     it('loads a value from an address', function () {
       var test = new Vm()
+      test.reset()
 
       // ld r0 @a2
 
@@ -266,6 +280,7 @@ describe('rasm-vm', function () {
 
     it('loads a value from an address stored in a register', function () {
       var test = new Vm()
+      test.reset()
 
       // ld r0 @r1
 
@@ -283,6 +298,7 @@ describe('rasm-vm', function () {
   describe('0x8x ST', function () {
     it('stores a value at an address', function () {
       var test = new Vm()
+      test.reset()
 
       // st r0 @a2
 
@@ -297,6 +313,7 @@ describe('rasm-vm', function () {
 
     it('stores a value at an address stored in a register', function () {
       var test = new Vm()
+      test.reset()
 
       // st r0 @r1
 
@@ -314,6 +331,7 @@ describe('rasm-vm', function () {
   describe('0x9x ADD', function () {
     it('adds up two registers', function () {
       var test = new Vm()
+      test.reset()
 
       // add r0 r1
 
@@ -329,6 +347,7 @@ describe('rasm-vm', function () {
 
     it('adds a constant to a register', function () {
       var test = new Vm()
+      test.reset()
 
       // add r0 #0a
 
@@ -343,6 +362,7 @@ describe('rasm-vm', function () {
 
     it('sets the carry flag', function () {
       var test = new Vm()
+      test.reset()
 
       // add r0 #ff
       // add r0 #2a
@@ -368,6 +388,7 @@ describe('rasm-vm', function () {
   describe('0xax SUB', function () {
     it('subtracts one register from another', function () {
       var test = new Vm()
+      test.reset()
 
       // sub r0 r1
 
@@ -383,6 +404,7 @@ describe('rasm-vm', function () {
 
     it('subtracts a constant from a register', function () {
       var test = new Vm()
+      test.reset()
 
       // sub r0 #09
 
@@ -397,6 +419,8 @@ describe('rasm-vm', function () {
 
     it('sets the carry flag', function () {
       var test = new Vm()
+      test.reset()
+      test.reset()
 
       // sub r0 #02
       // sub r0 #d5
@@ -422,6 +446,7 @@ describe('rasm-vm', function () {
   describe('0xbx AND', function () {
     it('computes the logical AND of two registers', function () {
       var test = new Vm()
+      test.reset()
 
       // and r0 r1
 
@@ -437,6 +462,7 @@ describe('rasm-vm', function () {
 
     it('computes the logical AND of a register and a constant', function () {
       var test = new Vm()
+      test.reset()
 
       // and r0 #2f
 
@@ -453,6 +479,7 @@ describe('rasm-vm', function () {
   describe('0xcx OR', function () {
     it('computes the logical OR of two registers', function () {
       var test = new Vm()
+      test.reset()
 
       // or r0 r1
 
@@ -468,6 +495,7 @@ describe('rasm-vm', function () {
 
     it('computes the logical OR of a register and a constant', function () {
       var test = new Vm()
+      test.reset()
 
       // or r0 #2f
 
@@ -484,6 +512,7 @@ describe('rasm-vm', function () {
   describe('0xdx XOR', function () {
     it('computes the logical XOR of two registers', function () {
       var test = new Vm()
+      test.reset()
 
       // xor r0 r1
 
@@ -499,6 +528,7 @@ describe('rasm-vm', function () {
 
     it('computes the logical XOR of a register and a constant', function () {
       var test = new Vm()
+      test.reset()
 
       // xor r0 #66
 
@@ -515,6 +545,7 @@ describe('rasm-vm', function () {
   describe('0xe0 INC', function () {
     it('increments a register', function () {
       var test = new Vm()
+      test.reset()
 
       // inc r0
 
@@ -529,6 +560,8 @@ describe('rasm-vm', function () {
 
     it('sets the carry flag', function () {
       var test = new Vm()
+      test.reset()
+      test.reset()
 
       // inc r0
       // inc r0
@@ -552,6 +585,7 @@ describe('rasm-vm', function () {
   describe('0xe1 DEC', function () {
     it('decrements a register', function () {
       var test = new Vm()
+      test.reset()
 
       // dec r0
 
@@ -566,6 +600,7 @@ describe('rasm-vm', function () {
 
     it('sets the carry flag', function () {
       var test = new Vm()
+      test.reset()
 
       // dec r0
       // dec r0
@@ -589,6 +624,9 @@ describe('rasm-vm', function () {
   describe('0xe2 NOT', function () {
     it('bitwise NOTs a register', function () {
       var test = new Vm()
+      test.reset()
+      test.reset()
+      test.reset()
 
       // not r0
 
@@ -605,6 +643,8 @@ describe('rasm-vm', function () {
   describe('0xe3 ASL', function () {
     it('bitshifts a register to the left', function () {
       var test = new Vm()
+      test.reset()
+      test.reset()
 
       // asl r0
 
@@ -619,6 +659,7 @@ describe('rasm-vm', function () {
 
     it('sets the carry flag', function () {
       var test = new Vm()
+      test.reset()
 
       // asl r0
       // asl r0
@@ -643,6 +684,8 @@ describe('rasm-vm', function () {
   describe('0xe4 ASR', function () {
     it('bitshifts a register to the right', function () {
       var test = new Vm()
+      test.reset()
+      test.reset()
 
       // asr r0
 
@@ -659,6 +702,7 @@ describe('rasm-vm', function () {
   describe('0xf0 PUSH', function () {
     it('puts a register into the RAM at the addres of the current stack pointer and decrements it', function () {
       var test = new Vm()
+      test.reset()
 
       // push r0
 
@@ -677,6 +721,7 @@ describe('rasm-vm', function () {
   describe('0xf1 POP', function () {
     it('increments the stack pointer and puts the value at its address into a register', function () {
       var test = new Vm()
+      test.reset()
 
       // pop r0
 
@@ -695,8 +740,7 @@ describe('rasm-vm', function () {
   describe('test programs', function () {
     it('fibonacci', function () {
       var test = new Vm()
-
-      //
+      test.reset()
     })
   })
 })
