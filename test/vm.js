@@ -32,7 +32,7 @@ describe('rasm-vm', function () {
 
       var fourtyTwoInterrupt = function (done) {
         setTimeout(function () {
-          this.setRegister(0, 0x2a)
+          this.writeRegister(0, 0x2a)
 
           done()
         }.bind(this), 200)

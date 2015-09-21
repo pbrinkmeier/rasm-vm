@@ -47,11 +47,14 @@ function Vm () {
     c: 0
   }
 
+  this.interrupts = new Array(256)
+
   /* this.reset() */
 }
 
 Vm.prototype.reset = function () {
   this.halted = false
+  this.interrupted = false
 
   this.writeIp(0)
   this.writeSp(0xdf)
@@ -114,6 +117,10 @@ Vm.prototype.writeCBit = function (value) {
   this.events.trigger('updateCBit', [value])
 }
 
+Vm.prototype.addInterrupt = function (interruptId, fn) {
+  this.interrupts[interruptId] = fn
+}
+
 Vm.prototype.step = function () {
   function getValue () {
     switch (addressingMode) {
@@ -161,7 +168,7 @@ Vm.prototype.step = function () {
   var value
   var address
 
-  if (!this.halted) {
+  if (!this.halted && !this.interrupted) {
     this.writeIp(this.ip + 0x2)
 
     switch (instruction >> 0x4) {
@@ -170,7 +177,13 @@ Vm.prototype.step = function () {
 
         break
       case INTERRUPT:
-        // TODO
+        if (typeof this.interrupts[operand] === 'function') {
+          this.interrupted = true
+
+          this.interrupts[operand].call(this, function () {
+            this.interrupted = false
+          }.bind(this))
+        }
 
         break
       case COMPARE:
