@@ -26,7 +26,38 @@ describe('rasm-vm', function () {
   })
 
   describe('0x1x INT', function () {
-    // TODO: Write spec/implement interrupts
+    it('has a method to add an asynchronous interrupt for an id', function (done) {
+      var test = new Vm()
+      test.reset()
+
+      var fourtyTwoInterrupt = function (done) {
+        setTimeout(function () {
+          this.setRegister(0, 0x2a)
+
+          done()
+        }.bind(this), 200)
+      }
+
+      test.addInterrupt(0x60, fourtyTwoInterrupt)
+
+      equal(test.interrupts[0x60], fourtyTwoInterrupt)
+
+      // int #60
+
+      test.writeRam(0, 0x10)
+      test.writeRam(1, 0x60)
+
+      test.step()
+
+      equal(test.interrupted, true)
+
+      setTimeout(function () {
+        equal(test.registers[0], 0x2a)
+        equal(test.interrupted, false)
+
+        done()
+      }, 200)
+    })
   })
 
   describe('0x2x CMP', function () {
