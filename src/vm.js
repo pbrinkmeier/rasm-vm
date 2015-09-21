@@ -2,6 +2,7 @@
 
 // TODO: only allow certain addressing modes on some of the instructions
 
+var addSystemInterrupts = require('./add-system-interrupts.js')
 var limit = require('./util/limit.js')
 var Reeal = require('reeal')
 
@@ -48,6 +49,8 @@ function Vm () {
   }
 
   this.interrupts = new Array(256)
+
+  addSystemInterrupts(this)
 
   /* this.reset() */
 }
