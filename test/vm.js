@@ -58,6 +58,29 @@ describe('rasm-vm', function () {
         done()
       }, 200)
     })
+
+    describe('Interrupt 0x20 - random', function () {
+      it('loads a random number from #00 to #ff into r0', function () {
+        var test = new Vm()
+        test.reset()
+
+        // int #20
+
+        test.writeRam(0, 0x10)
+        test.writeRam(1, 0x20)
+
+        test.step()
+
+        // await interrupt
+        while (test.interrupted) {}
+
+        equal(
+          test.registers[0] >= 0x00 &&
+          test.registers[0] <= 0xff,
+          true
+        )
+      })
+    })
   })
 
   describe('0x2x CMP', function () {
