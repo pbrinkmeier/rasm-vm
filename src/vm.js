@@ -78,8 +78,8 @@ Vm.prototype.writeRam = function (address, value) {
 
   this.Ram[address] = result.value
 
-  this.events.trigger('updateRam', [address, value])
-  this.events.trigger('updateRam:' + String(address), [address, value])
+  this.events.trigger('updateRam', [address, result.value])
+  this.events.trigger('updateRam:' + String(address), [address, result.value])
 }
 
 Vm.prototype.writeRegister = function (register, value) {
@@ -88,8 +88,8 @@ Vm.prototype.writeRegister = function (register, value) {
   this.registers[register] = result.value
   this.writeCBit(result.carry)
 
-  this.events.trigger('updateRegister', [register, value])
-  this.events.trigger('updateRegister:' +  String(register), [register, value])
+  this.events.trigger('updateRegister', [register, result.value])
+  this.events.trigger('updateRegister:' +  String(register), [register, result.value])
 }
 
 Vm.prototype.writeIp = function (value) {
@@ -97,7 +97,7 @@ Vm.prototype.writeIp = function (value) {
 
   this.ip = result.value
 
-  this.events.trigger('updateInstructionPointer', [value])
+  this.events.trigger('updateInstructionPointer', [result.value])
 }
 
 Vm.prototype.writeSp = function (value) {
@@ -105,19 +105,19 @@ Vm.prototype.writeSp = function (value) {
 
   this.sp = result.value
 
-  this.events.trigger('updateStackPointer', [value])
+  this.events.trigger('updateStackPointer', [result.value])
 }
 
 Vm.prototype.writeZBit = function (value) {
   this.bits.z = value
 
-  this.events.trigger('updateZBit', [value])
+  this.events.trigger('updateZBit', [result.value])
 }
 
 Vm.prototype.writeCBit = function (value) {
   this.bits.c = value
 
-  this.events.trigger('updateCBit', [value])
+  this.events.trigger('updateCBit', [result.value])
 }
 
 Vm.prototype.addInterrupt = function (interruptId, fn) {
