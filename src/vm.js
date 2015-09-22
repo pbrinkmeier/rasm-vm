@@ -111,13 +111,13 @@ Vm.prototype.writeSp = function (value) {
 Vm.prototype.writeZBit = function (value) {
   this.bits.z = value
 
-  this.events.trigger('updateZBit', [result.value])
+  this.events.trigger('updateZBit', [value])
 }
 
 Vm.prototype.writeCBit = function (value) {
   this.bits.c = value
 
-  this.events.trigger('updateCBit', [result.value])
+  this.events.trigger('updateCBit', [value])
 }
 
 Vm.prototype.addInterrupt = function (interruptId, fn) {
